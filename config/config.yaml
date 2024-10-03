@@ -1,0 +1,40 @@
+artifacts_root: artifacts
+
+
+data_ingestion:
+  root_dir: artifacts/data_ingestion
+  bucket_name: data-ingestion-real-estate
+  local_data_file: artifacts/data_ingestion/data.csv
+  s3_file_path: train.csv
+  amazon_s3_access_keys: AmazonS3fullaccess_accessKeys.csv
+
+data_transformation:
+  root_dir: artifacts/data_transformation
+  data_file: artifacts/data_ingestion/data.csv
+  transformed_data_file: artifacts/data_transformation/transformed_data.csv
+
+feature_selection:
+  root_dir: artifacts/train_test_data
+  transformed_data_file: artifacts/data_transformation/transformed_data.csv
+  X_train_data_file: artifacts/train_test_data/X_train.csv
+  X_test_data_file: artifacts/train_test_data/X_test.csv
+  Y_train_data_file: artifacts/train_test_data/Y_train.csv
+  Y_test_data_file: artifacts/train_test_data/Y_test.csv
+
+feature_scaling:
+  root_dir: artifacts/train_test_data_scaled
+  X_train_data_file: artifacts/train_test_data/X_train.csv
+  X_test_data_file: artifacts/train_test_data/X_test.csv
+  X_train_scaled_data_file: artifacts/train_test_data_scaled/X_train_scaled.csv
+  X_test_scaled_data_file: artifacts/train_test_data_scaled/X_test_scaled.csv
+  
+model_training:
+  root_dir: artifacts/model_trainer
+  X_train_scaled_data_file: artifacts/train_test_data_scaled/X_train_scaled.csv
+  X_test_scaled_data_file: artifacts/train_test_data_scaled/X_test_scaled.csv
+  Y_train_data_file: artifacts/train_test_data/Y_train.csv
+  Y_test_data_file: artifacts/train_test_data/Y_test.csv
+  performance_metrics_file_path: artifacts/model_trainer/performance_metrics.csv
+  
+
+  

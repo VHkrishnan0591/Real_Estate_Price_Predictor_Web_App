@@ -1,0 +1,43 @@
+amazon_service_name: 's3'
+discrete_feature: ['MSSubClass', 'OverallQual', 'OverallCond', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageCars', 'MoSold', 'YrSold']
+Id_column: ['Id']
+categorical_stratergy: 'constant'
+fill_value: 'missing'
+numerical_stratergy: 'median'
+target_label: 'SalePrice'
+rare_categorical_variable: 'Rare_var'
+nominal_categorical_feature: ['MSZoning', 'Street','Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig', 'LandSlope',
+                                'Neighborhood', 'Condition1', 'Condition2', 'BldgType', 'HouseStyle', 'RoofStyle', 'RoofMatl',
+                                'Exterior1st', 'Exterior2nd', 'MasVnrType','ExterCond', 'Foundation','BsmtCond', 'BsmtExposure',
+                                'BsmtQual','Heating', 'CentralAir', 'Electrical', 'GarageType', 'GarageFinish', 'GarageCond', 
+                                'PavedDrive','MiscFeature', 'SaleType', 'SaleCondition']
+ordinal_categorical_feature: ['ExterQual', 'BsmtFinType1', 'BsmtFinType2','HeatingQC','KitchenQual', 'Functional', 'FireplaceQu', 'GarageQual',
+                                'PoolQC', 'Fence']
+alpha_for_lasso: 0.005
+random_state_for_lasso: 0
+percentile_for_mutual_info: 20
+test_size: 0.1
+random_state_for_train_test_split: 0
+list_of_models: ['Linear Regression', 'Ridge Regression', 'Polynomial Regression', 'SVR', 'Random Forrest Regressor', 'Decision Tree Regressor','AdaBoost Regressor','Gradient Boosting Regressor','XGBRegressor' ]
+polynomial_type: 'poly'
+polynomial_model: 'linear_model'
+polynomial_degree: 2
+kernel: 'rbf'
+C: 1
+n_estimators: 100
+max_depth: 5
+number_of_iteration: 50
+cv: 3
+verbose: 2
+random_state_for_randomised_cv: 100
+n_jobs: -1
+list_of_models_for_hyper_parameter_tuning: ['Hyper Parameter Ridge Regression', 'Hyper Parameter Support Vector Regression', 'Hyper Parameter Randomn Forrest Regression', 'Hyper Parameter Gradient Boost Regression','Hyper Parameter XGBoost Regression']
+ridge_regression_solver: ['auto', 'svd', 'cholesky', 'lsqr', 'sparse_cg', 'sag', 'saga']
+tol: [0.0001, 0.00001, 0.000001]
+SVR_gamma: ['scale','auto']
+max_features: ['sqrt','log2',None]
+hyper_n_estimators: [8,16,32,64,128,256]
+gradient_boost_learning_rate: [.1,.01,.05,.001]
+subsample: [0.6,0.7,0.75,0.8,0.85,0.9]
+xgboost_learning_rate: [.1,.01,.05,.001]
+
