@@ -4,6 +4,7 @@ import os
 from sklearn.impute import SimpleImputer
 from sklearn.base import BaseEstimator, TransformerMixin
 from real_estate_price_predictor.entity.config_entity import DataTransformationConfig
+from real_estate_price_predictor.utils.common import load_object, save_object
 
 class SeparatingDifferentFeatures:
     def __init__(self,config:DataTransformationConfig):
@@ -94,6 +95,24 @@ class SeparatingDifferentFeatures:
 
     def save_the_transformed_data(self,dataset:pd.DataFrame):
         dataset.to_csv(self.config.transformed_data,index=False)
+    
+    def save_the_transformed_data(self,dataset:pd.DataFrame):
+        dataset.to_csv(self.config.transformed_data)
+
+    def save_the_model(self,dict_of_transform_models:dict):
+        for key in dict_of_transform_models.keys():
+            if key == 'date_time_variables':
+                save_object(self.config.date_time_handler_model_file,dict_of_transform_models[key])
+            elif key == 'log_transformer':
+                save_object(self.config.log_transformer_model_file,dict_of_transform_models[key])
+            elif key == 'rare_categorical_values_handler':
+                save_object(self.config.rare_categorical_handler_file,dict_of_transform_models[key])
+            elif key == 'ordinal_encoder':
+                save_object(self.config.ordinal_encoder_model_file,dict_of_transform_models[key])
+            elif key == 'nominal_encoder': 
+                save_object(self.config.nominal_encoder_model_file,dict_of_transform_models[key])
+            elif key == 'remove_outliers_transformer':
+                save_object(self.config.remove_outlier_model_file,dict_of_transform_models[key])
 
 
 # Handling Date time variables
@@ -129,14 +148,18 @@ class log_transform_of_numeric_variables(BaseEstimator, TransformerMixin,Separat
 class handling_rare_categorical_values(BaseEstimator, TransformerMixin,SeparatingDifferentFeatures):
     def __init__(self,config:DataTransformationConfig): # no *args or **kargs
          super().__init__(config)
+         self.temp_df_dict={}
     def fit(self, X, y=None):
-         return self # nothing else to do
-    def transform(self, X, y=None):
          categorical_features = self.total_categorical_features(X)
          for feature in categorical_features:
              temp=X.groupby(feature)[self.config.params_target_label].count()/len(X)
              temp_df=temp[temp>0.01].index
-             X[feature]=np.where(X[feature].isin(temp_df),X[feature],self.config.params_rare_categorical_variable)
+             self.temp_df_dict[feature]= temp_df
+         return self # nothing else to do
+    def transform(self, X, y=None):
+         categorical_features = self.total_categorical_features(X)
+         for feature in categorical_features:
+             X[feature]=np.where(X[feature].isin(self.temp_df_dict[feature]),X[feature],self.config.params_rare_categorical_variable)
          return X
 
 # Ordinal Catgeorical Features Encoding
@@ -151,9 +174,10 @@ class handling_ordinal_categorical_values(BaseEstimator, TransformerMixin,Separa
              labels_ordered={k:i for i,k in enumerate(labels_ordered,0)}
              self.label_ordered_feature[feature] = labels_ordered
          return self
-    def transform(self, X, y=None):
+    def transform(self, X:pd.DataFrame, y=None):
          for feature in self.config.params_ordinal_categorical_feature:
-           X[feature]=X[feature].map(self.label_ordered_feature[feature])
+           if feature in X.columns:
+               X[feature]=X[feature].map(self.label_ordered_feature[feature])
          return X
 
 # Nominal Categorical Features Encoding
@@ -167,9 +191,10 @@ class handling_nominal_categorical_values(BaseEstimator, TransformerMixin,Separa
              nominal_label=X.groupby([feature])[self.config.params_target_label].mean().to_dict()
              self.label_nominal_feature[feature] = nominal_label
          return self
-    def transform(self, X, y=None):
+    def transform(self, X:pd.DataFrame, y=None):
          for feature in self.config.params_nominal_categorical_feature:
-           X[feature]=X[feature].map(self.label_nominal_feature[feature])
+           if feature in X.columns:
+               X[feature]=X[feature].map(self.label_nominal_feature[feature])
          return X
 
 # Handling Outliers

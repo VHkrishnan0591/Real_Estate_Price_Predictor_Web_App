@@ -66,6 +66,14 @@ def save_object(file_path, obj):
     except Exception as e:
         raise e
 
+def load_object(file_path):
+    try:
+        with open(file_path, "rb") as file_obj:
+            return pickle.load(file_obj)
+
+    except Exception as e:
+        raise e
+
 
 # @ensure_annotations
 def save_json(path: Path, data: dict):

@@ -12,6 +12,13 @@ data_transformation:
   root_dir: artifacts/data_transformation
   data_file: artifacts/data_ingestion/data.csv
   transformed_data_file: artifacts/data_transformation/transformed_data.csv
+  date_time_handler_model_file: artifacts/data_transformation/date_time_handler.pkl
+  log_transformer_model_file: artifacts/data_transformation/log_transfomer.pkl
+  ordinal_encoder_model_file: artifacts/data_transformation/ordinal_encoder_model.pkl
+  nominal_encoder_model_file: artifacts/data_transformation/nominal_encoder_model.pkl
+  rare_categorical_handler_file: artifacts/data_transformation/rare_categorical_model.pkl
+  remove_outlier_model_file: artifacts/data_transformation/remove_outlier_model.pkl
+
 
 feature_selection:
   root_dir: artifacts/train_test_data
@@ -27,6 +34,7 @@ feature_scaling:
   X_test_data_file: artifacts/train_test_data/X_test.csv
   X_train_scaled_data_file: artifacts/train_test_data_scaled/X_train_scaled.csv
   X_test_scaled_data_file: artifacts/train_test_data_scaled/X_test_scaled.csv
+  feature_scaling_model: artifacts/train_test_data_scaled/min_max_scaler.pkl
   
 model_training:
   root_dir: artifacts/model_trainer
@@ -35,6 +43,17 @@ model_training:
   Y_train_data_file: artifacts/train_test_data/Y_train.csv
   Y_test_data_file: artifacts/train_test_data/Y_test.csv
   performance_metrics_file_path: artifacts/model_trainer/performance_metrics.csv
+
+predict:
+  date_time_handler_model_file: artifacts/data_transformation/date_time_handler.pkl
+  log_transformer_model_file: artifacts/data_transformation/log_transfomer.pkl
+  ordinal_encoder_model_file: artifacts/data_transformation/ordinal_encoder_model.pkl
+  nominal_encoder_model_file: artifacts/data_transformation/nominal_encoder_model.pkl
+  rare_categorical_handler_file: artifacts/data_transformation/rare_categorical_model.pkl
+  remove_outlier_model_file: artifacts/data_transformation/remove_outlier_model.pkl
+  feature_scaling_model: artifacts/train_test_data_scaled/min_max_scaler.pkl
+  best_model_directory: artifacts/model_trainer/
+
   
 
   

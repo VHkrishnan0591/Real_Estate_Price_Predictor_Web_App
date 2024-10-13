@@ -16,6 +16,12 @@ class DataTransformationConfig:
     root_dir:Path
     data_file:Path
     transformed_data:Path
+    date_time_handler_model_file:Path
+    log_transformer_model_file:Path
+    ordinal_encoder_model_file: Path
+    nominal_encoder_model_file: Path
+    remove_outlier_model_file: Path
+    rare_categorical_handler_file: Path
     params_discrete_feature: list
     params_Id_column: list
     params_categorical_stratergy:str
@@ -49,6 +55,7 @@ class FeatureScalingConfig:
     X_test_data_file:Path
     X_train_scaled_data_file:Path
     X_test_scaled_data_file:Path
+    feature_scaling_model:Path
 
 @dataclass(frozen=True)
 class ModelTrainingConfig:
@@ -80,3 +87,14 @@ class ModelTrainingConfig:
     params_gradient_boost_learning_rate: list
     params_subsample: list
     params_xgboost_learning_rate: list
+
+@dataclass(frozen=True)
+class PredictConfig:
+    date_time_handler_model_file: Path
+    log_transformer_model_file: Path
+    ordinal_encoder_model_file: Path
+    nominal_encoder_model_file: Path
+    rare_categorical_handler_file: Path
+    remove_outlier_model_file: Path
+    feature_scaling_model: Path
+    best_model_directory: Path

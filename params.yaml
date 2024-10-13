@@ -2,7 +2,7 @@ amazon_service_name: 's3'
 discrete_feature: ['MSSubClass', 'OverallQual', 'OverallCond', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageCars', 'MoSold', 'YrSold']
 Id_column: ['Id']
 categorical_stratergy: 'constant'
-fill_value: 'missing'
+fill_value: 'others'
 numerical_stratergy: 'median'
 target_label: 'SalePrice'
 rare_categorical_variable: 'Rare_var'

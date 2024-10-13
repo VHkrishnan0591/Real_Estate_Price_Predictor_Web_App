@@ -16,7 +16,7 @@ class FeatureScalingPipeline:
         logger.info(f">>>>>> stage Feature Scaling started <<<<<<")
         feature_scaling = FeatureScaling(config=feature_scaling_config)
         logger.info(f">>>>>> stage Feature Scaling ended <<<<<<")
-        feature_scaling.min_max_scaler(pd.DataFrame())
+        feature_scaling.min_max_scaler()
 
 
 if __name__ == '__main__':

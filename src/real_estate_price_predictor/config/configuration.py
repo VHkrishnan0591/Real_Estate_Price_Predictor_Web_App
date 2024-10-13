@@ -1,6 +1,6 @@
 from real_estate_price_predictor.constants import *
 from real_estate_price_predictor.utils.common import read_yaml, create_directories
-from real_estate_price_predictor.entity.config_entity import DataIngestionConfig, DataTransformationConfig, FeatureScalingConfig, FeatureSelectionConfig, ModelTrainingConfig
+from real_estate_price_predictor.entity.config_entity import DataIngestionConfig, DataTransformationConfig, FeatureScalingConfig, FeatureSelectionConfig, ModelTrainingConfig, PredictConfig
 
 class ConfigurationManager:
     def __init__(
@@ -40,6 +40,12 @@ class ConfigurationManager:
             root_dir = config.root_dir,
             data_file = config.data_file,
             transformed_data = config.transformed_data_file,
+            date_time_handler_model_file = config.date_time_handler_model_file,
+            log_transformer_model_file = config.log_transformer_model_file,
+            ordinal_encoder_model_file = config.ordinal_encoder_model_file,
+            nominal_encoder_model_file =  config.nominal_encoder_model_file,
+            remove_outlier_model_file = config.remove_outlier_model_file,
+            rare_categorical_handler_file = config.rare_categorical_handler_file,
             params_discrete_feature = self.params.discrete_feature,
             params_Id_column = self.params.Id_column,
             params_categorical_stratergy = self.params.categorical_stratergy,
@@ -87,7 +93,8 @@ class ConfigurationManager:
             X_train_data_file = config.X_train_data_file,
             X_test_data_file = config.X_test_data_file,
             X_train_scaled_data_file = config.X_train_scaled_data_file,
-            X_test_scaled_data_file =  config.X_test_scaled_data_file   
+            X_test_scaled_data_file =  config.X_test_scaled_data_file,
+            feature_scaling_model = config.feature_scaling_model   
         )
 
         return feature_scaling_config
@@ -130,3 +137,19 @@ class ConfigurationManager:
         )
 
         return model_training_config
+    
+    def get_predict_config(self) -> PredictConfig:
+        config = self.config.predict
+
+        predict_config = PredictConfig(
+            date_time_handler_model_file = config.date_time_handler_model_file ,
+            log_transformer_model_file = config.log_transformer_model_file,
+            ordinal_encoder_model_file = config.ordinal_encoder_model_file,
+            nominal_encoder_model_file = config.nominal_encoder_model_file,
+            rare_categorical_handler_file = config.rare_categorical_handler_file,
+            remove_outlier_model_file = config.remove_outlier_model_file,
+            feature_scaling_model = config.feature_scaling_model,
+            best_model_directory = config.best_model_directory
+        )
+
+        return predict_config
