@@ -163,5 +163,6 @@ cython_debug/
 AmazonS3fullaccess_accessKeys.csv
 myenv/
 /artifacts/
-.dvc/
+.dvc/*
 /data.csv
+!.dvc/config
