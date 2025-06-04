@@ -10,8 +10,13 @@ import pandas as pd
 class DataIngestion:
     def __init__(self, config: DataIngestionConfig):
         self.config = config
-
-
+    
+    def ingestion(self):
+        if not os.path.exists(self.config.local_data_file):
+            df = pd.read_csv('data.csv')
+            df.to_csv(self.config.local_data_file, index=False)
+        else:
+            logger.info(f"File already exists of size: {get_size(Path(self.config.local_data_file))}") 
     
     def download_file(self):
         if not os.path.exists(self.config.local_data_file):

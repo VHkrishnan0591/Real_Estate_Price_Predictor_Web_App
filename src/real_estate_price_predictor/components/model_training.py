@@ -14,11 +14,16 @@ from real_estate_price_predictor.entity.config_entity import ModelTrainingConfig
 import os
 import pandas as pd
 import numpy as np
+from dvclive import Live
 
 class ModelTraining:
     def __init__(self,config=ModelTrainingConfig):
         self.config = config
         self.best_params ={}
+        self.params ={}
+        self.metric = {}
+
+        
     
     def model_training(self):
         X_test_data = pd.read_csv(self.config.X_test_scaled_data_file)
@@ -65,8 +70,13 @@ class ModelTraining:
 
             n = X_test_data.shape[0]  # Number of observations (samples) in the testing set
             p = X_test_data.shape[1]  # Number of features in the model
-            adjusted_r2_score.append(1 - (1 - r2) * (n - 1) / (n - p - 1))
-            mse.append(mean_squared_error(y_test, y_pred))
+            adj_r2_score = 1 - (1 - r2) * (n - 1) / (n - p - 1)
+            adjusted_r2_score.append(adj_r2_score)
+            mean_square_error = mean_squared_error(y_test, y_pred)
+            mse.append(mean_square_error)
+            self.metric[i+'_Adjusted_R2_Score'] = adj_r2_score
+            self.metric[i+'_R2_Score'] = r2
+            self.metric[i+'_Mean_Squared_Error'] = mean_square_error
         data = {'Models': list_of_models, 'Adjusted_R2_Score': adjusted_r2_score, 'R2_Score': r2_score_of_models , 'Mean_Squared_Error': mse}
         performance_metrics = pd.DataFrame.from_dict(data)
         performance_metrics.set_index('Models', inplace = False)
@@ -139,6 +149,10 @@ class ModelTraining:
             adjusted_r2_score_hyper.append(adjusted_r2_hyper)
             mse = mean_squared_error(y_test, y_pred)
             mse_hyper.append(mse)
+            self.params[i+"_Params"]=best_random_grid.get_params()
+            self.metric[i+'_Adjusted_R2_Score'] = adjusted_r2_hyper
+            self.metric[i+'_R2_Score'] = r2_hyper
+            self.metric[i+'_Mean_Squared_Error'] = mse
         data = {'Models': list_of_models_for_hyper_parameter_tuning, 'Adjusted_R2_Score': adjusted_r2_score_hyper, 'R2_Score': r2_score_of_models_hyper , 'Mean_Squared_Error': mse_hyper}
         performance_metrics_hyper = pd.DataFrame.from_dict(data)
         performance_metrics_hyper.set_index('Models', inplace = False)
@@ -181,3 +195,9 @@ class ModelTraining:
         best_model_name = best_model_name.replace(" ","") + '.pkl'
         file_path = os.path.join(self.config.root_dir,best_model_name)
         save_object(file_path,model)
+        with Live() as live:
+            for key, value in self.metric.items():
+                live.log_metric(key,value)
+            live.log_params(self.params)
+            live.log_artifact(file_path,type="model")
+            live.next_step()

@@ -1,0 +1,745 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/real_estate_price_predictor/pipeline/stage_01_data_ingestion.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: 69d042b11cedd98fd7e35633e1436a72
+      size: 2858
+    - path: src/real_estate_price_predictor/pipeline/stage_01_data_ingestion.py
+      hash: md5
+      md5: 7b176efb6d15053c7c2d8d9be1b01a4d
+      size: 937
+    outs:
+    - path: artifacts/data_ingestion/data.csv
+      hash: md5
+      md5: c05e34fb61fb335139782ab73a5c73bb
+      size: 452815
+  data_transforamtion:
+    cmd: python src/real_estate_price_predictor/pipeline/stage_02_data_transformation.py
+    deps:
+    - path: artifacts/data_ingestion/data.csv
+      hash: md5
+      md5: c05e34fb61fb335139782ab73a5c73bb
+      size: 452815
+    - path: config/config.yaml
+      hash: md5
+      md5: 69d042b11cedd98fd7e35633e1436a72
+      size: 2858
+    - path: src/real_estate_price_predictor/pipeline/stage_02_data_transformation.py
+      hash: md5
+      md5: 8a3db54830699883c30cdc8d175b619a
+      size: 4669
+    params:
+      params.yaml:
+        C: 1
+        Id_column:
+        - Id
+        SVR_gamma:
+        - scale
+        - auto
+        alpha_for_lasso: 0.005
+        amazon_service_name: s3
+        categorical_stratergy: constant
+        cv: 3
+        discrete_feature:
+        - MSSubClass
+        - OverallQual
+        - OverallCond
+        - BsmtFullBath
+        - BsmtHalfBath
+        - FullBath
+        - HalfBath
+        - BedroomAbvGr
+        - KitchenAbvGr
+        - TotRmsAbvGrd
+        - Fireplaces
+        - GarageCars
+        - MoSold
+        - YrSold
+        fill_value: others
+        gradient_boost_learning_rate:
+        - 0.1
+        - 0.01
+        - 0.05
+        - 0.001
+        hyper_n_estimators:
+        - 8
+        - 16
+        - 32
+        - 64
+        - 128
+        - 256
+        kernel: rbf
+        list_of_models:
+        - Linear Regression
+        - Ridge Regression
+        - Polynomial Regression
+        - SVR
+        - Random Forrest Regressor
+        - Decision Tree Regressor
+        - AdaBoost Regressor
+        - Gradient Boosting Regressor
+        - XGBRegressor
+        list_of_models_for_hyper_parameter_tuning:
+        - Hyper Parameter Ridge Regression
+        - Hyper Parameter Support Vector Regression
+        - Hyper Parameter Randomn Forrest Regression
+        - Hyper Parameter Gradient Boost Regression
+        - Hyper Parameter XGBoost Regression
+        max_depth: 5
+        max_features:
+        - sqrt
+        - log2
+        - None
+        n_estimators: 100
+        n_jobs: -1
+        nominal_categorical_feature:
+        - MSZoning
+        - Street
+        - Alley
+        - LotShape
+        - LandContour
+        - Utilities
+        - LotConfig
+        - LandSlope
+        - Neighborhood
+        - Condition1
+        - Condition2
+        - BldgType
+        - HouseStyle
+        - RoofStyle
+        - RoofMatl
+        - Exterior1st
+        - Exterior2nd
+        - MasVnrType
+        - ExterCond
+        - Foundation
+        - BsmtCond
+        - BsmtExposure
+        - BsmtQual
+        - Heating
+        - CentralAir
+        - Electrical
+        - GarageType
+        - GarageFinish
+        - GarageCond
+        - PavedDrive
+        - MiscFeature
+        - SaleType
+        - SaleCondition
+        number_of_iteration: 50
+        numerical_stratergy: median
+        ordinal_categorical_feature:
+        - ExterQual
+        - BsmtFinType1
+        - BsmtFinType2
+        - HeatingQC
+        - KitchenQual
+        - Functional
+        - FireplaceQu
+        - GarageQual
+        - PoolQC
+        - Fence
+        percentile_for_mutual_info: 20
+        polynomial_degree: 2
+        polynomial_model: linear_model
+        polynomial_type: poly
+        random_state_for_lasso: 0
+        random_state_for_randomised_cv: 100
+        random_state_for_train_test_split: 0
+        rare_categorical_variable: Rare_var
+        ridge_regression_solver:
+        - auto
+        - svd
+        - cholesky
+        - lsqr
+        - sparse_cg
+        - sag
+        - saga
+        subsample:
+        - 0.6
+        - 0.7
+        - 0.75
+        - 0.8
+        - 0.85
+        - 0.9
+        target_label: SalePrice
+        test_size: 0.1
+        tol:
+        - 0.0001
+        - 1e-05
+        - 1e-06
+        verbose: 2
+        xgboost_learning_rate:
+        - 0.1
+        - 0.01
+        - 0.05
+        - 0.001
+    outs:
+    - path: artifacts/data_transformation/date_time_handler.pkl
+      hash: md5
+      md5: 0a747d3d25976d356c012f6d2ca9ec9e
+      size: 2522
+    - path: artifacts/data_transformation/log_transfomer.pkl
+      hash: md5
+      md5: a26fb75fd07f60422631ead56d8e1f7e
+      size: 2528
+    - path: artifacts/data_transformation/nominal_encoder_model.pkl
+      hash: md5
+      md5: 62674054c967ed9ede206b461d14280f
+      size: 5773
+    - path: artifacts/data_transformation/ordinal_encoder_model.pkl
+      hash: md5
+      md5: 95072d096fcb8de58275055407ee1d36
+      size: 3052
+    - path: artifacts/data_transformation/rare_categorical_model.pkl
+      hash: md5
+      md5: 45d42a46fcef04035a1a3c29ee1e1de4
+      size: 6814
+    - path: artifacts/data_transformation/remove_outlier_model.pkl
+      hash: md5
+      md5: d2b957b2c9e1af4c346785123d8edd38
+      size: 6287
+    - path: artifacts/data_transformation/transformed_data.csv
+      hash: md5
+      md5: ad5200b960be34fc49b89c021471fe25
+      size: 1392764
+  feature_selection_train_test_split:
+    cmd: python 
+      src/real_estate_price_predictor/pipeline/stage_03_feature_selection_train_test_split.py
+    deps:
+    - path: artifacts/data_transformation/transformed_data.csv
+      hash: md5
+      md5: ad5200b960be34fc49b89c021471fe25
+      size: 1392764
+    - path: config/config.yaml
+      hash: md5
+      md5: 69d042b11cedd98fd7e35633e1436a72
+      size: 2858
+    - path: 
+        src/real_estate_price_predictor/pipeline/stage_03_feature_selection_train_test_split.py
+      hash: md5
+      md5: e3ee584445ed873a23a7820da5eee067
+      size: 1344
+    params:
+      params.yaml:
+        C: 1
+        Id_column:
+        - Id
+        SVR_gamma:
+        - scale
+        - auto
+        alpha_for_lasso: 0.005
+        amazon_service_name: s3
+        categorical_stratergy: constant
+        cv: 3
+        discrete_feature:
+        - MSSubClass
+        - OverallQual
+        - OverallCond
+        - BsmtFullBath
+        - BsmtHalfBath
+        - FullBath
+        - HalfBath
+        - BedroomAbvGr
+        - KitchenAbvGr
+        - TotRmsAbvGrd
+        - Fireplaces
+        - GarageCars
+        - MoSold
+        - YrSold
+        fill_value: others
+        gradient_boost_learning_rate:
+        - 0.1
+        - 0.01
+        - 0.05
+        - 0.001
+        hyper_n_estimators:
+        - 8
+        - 16
+        - 32
+        - 64
+        - 128
+        - 256
+        kernel: rbf
+        list_of_models:
+        - Linear Regression
+        - Ridge Regression
+        - Polynomial Regression
+        - SVR
+        - Random Forrest Regressor
+        - Decision Tree Regressor
+        - AdaBoost Regressor
+        - Gradient Boosting Regressor
+        - XGBRegressor
+        list_of_models_for_hyper_parameter_tuning:
+        - Hyper Parameter Ridge Regression
+        - Hyper Parameter Support Vector Regression
+        - Hyper Parameter Randomn Forrest Regression
+        - Hyper Parameter Gradient Boost Regression
+        - Hyper Parameter XGBoost Regression
+        max_depth: 5
+        max_features:
+        - sqrt
+        - log2
+        - None
+        n_estimators: 100
+        n_jobs: -1
+        nominal_categorical_feature:
+        - MSZoning
+        - Street
+        - Alley
+        - LotShape
+        - LandContour
+        - Utilities
+        - LotConfig
+        - LandSlope
+        - Neighborhood
+        - Condition1
+        - Condition2
+        - BldgType
+        - HouseStyle
+        - RoofStyle
+        - RoofMatl
+        - Exterior1st
+        - Exterior2nd
+        - MasVnrType
+        - ExterCond
+        - Foundation
+        - BsmtCond
+        - BsmtExposure
+        - BsmtQual
+        - Heating
+        - CentralAir
+        - Electrical
+        - GarageType
+        - GarageFinish
+        - GarageCond
+        - PavedDrive
+        - MiscFeature
+        - SaleType
+        - SaleCondition
+        number_of_iteration: 50
+        numerical_stratergy: median
+        ordinal_categorical_feature:
+        - ExterQual
+        - BsmtFinType1
+        - BsmtFinType2
+        - HeatingQC
+        - KitchenQual
+        - Functional
+        - FireplaceQu
+        - GarageQual
+        - PoolQC
+        - Fence
+        percentile_for_mutual_info: 20
+        polynomial_degree: 2
+        polynomial_model: linear_model
+        polynomial_type: poly
+        random_state_for_lasso: 0
+        random_state_for_randomised_cv: 100
+        random_state_for_train_test_split: 0
+        rare_categorical_variable: Rare_var
+        ridge_regression_solver:
+        - auto
+        - svd
+        - cholesky
+        - lsqr
+        - sparse_cg
+        - sag
+        - saga
+        subsample:
+        - 0.6
+        - 0.7
+        - 0.75
+        - 0.8
+        - 0.85
+        - 0.9
+        target_label: SalePrice
+        test_size: 0.1
+        tol:
+        - 0.0001
+        - 1e-05
+        - 1e-06
+        verbose: 2
+        xgboost_learning_rate:
+        - 0.1
+        - 0.01
+        - 0.05
+        - 0.001
+    outs:
+    - path: artifacts/train_test_data/X_test.csv
+      hash: md5
+      md5: 77ad439205c105f825583c388bd48742
+      size: 29058
+    - path: artifacts/train_test_data/X_train.csv
+      hash: md5
+      md5: b6503cc219b726996555751f7699eae7
+      size: 258488
+    - path: artifacts/train_test_data/Y_test.csv
+      hash: md5
+      md5: 63c3796faaae52ea80f467149013f7c7
+      size: 2911
+    - path: artifacts/train_test_data/Y_train.csv
+      hash: md5
+      md5: 31eba27599586e2c6fdbe20fb209a710
+      size: 26002
+  feature_scaling:
+    cmd: python src/real_estate_price_predictor/pipeline/stage_04_feature_scaling.py
+    deps:
+    - path: artifacts/train_test_data/X_test.csv
+      hash: md5
+      md5: 77ad439205c105f825583c388bd48742
+      size: 29058
+    - path: artifacts/train_test_data/X_train.csv
+      hash: md5
+      md5: b6503cc219b726996555751f7699eae7
+      size: 258488
+    - path: config/config.yaml
+      hash: md5
+      md5: 69d042b11cedd98fd7e35633e1436a72
+      size: 2858
+    - path: src/real_estate_price_predictor/pipeline/stage_04_feature_scaling.py
+      hash: md5
+      md5: c8ff867cf5db450ab53b65838e602cba
+      size: 1051
+    params:
+      params.yaml:
+        C: 1
+        Id_column:
+        - Id
+        SVR_gamma:
+        - scale
+        - auto
+        alpha_for_lasso: 0.005
+        amazon_service_name: s3
+        categorical_stratergy: constant
+        cv: 3
+        discrete_feature:
+        - MSSubClass
+        - OverallQual
+        - OverallCond
+        - BsmtFullBath
+        - BsmtHalfBath
+        - FullBath
+        - HalfBath
+        - BedroomAbvGr
+        - KitchenAbvGr
+        - TotRmsAbvGrd
+        - Fireplaces
+        - GarageCars
+        - MoSold
+        - YrSold
+        fill_value: others
+        gradient_boost_learning_rate:
+        - 0.1
+        - 0.01
+        - 0.05
+        - 0.001
+        hyper_n_estimators:
+        - 8
+        - 16
+        - 32
+        - 64
+        - 128
+        - 256
+        kernel: rbf
+        list_of_models:
+        - Linear Regression
+        - Ridge Regression
+        - Polynomial Regression
+        - SVR
+        - Random Forrest Regressor
+        - Decision Tree Regressor
+        - AdaBoost Regressor
+        - Gradient Boosting Regressor
+        - XGBRegressor
+        list_of_models_for_hyper_parameter_tuning:
+        - Hyper Parameter Ridge Regression
+        - Hyper Parameter Support Vector Regression
+        - Hyper Parameter Randomn Forrest Regression
+        - Hyper Parameter Gradient Boost Regression
+        - Hyper Parameter XGBoost Regression
+        max_depth: 5
+        max_features:
+        - sqrt
+        - log2
+        - None
+        n_estimators: 100
+        n_jobs: -1
+        nominal_categorical_feature:
+        - MSZoning
+        - Street
+        - Alley
+        - LotShape
+        - LandContour
+        - Utilities
+        - LotConfig
+        - LandSlope
+        - Neighborhood
+        - Condition1
+        - Condition2
+        - BldgType
+        - HouseStyle
+        - RoofStyle
+        - RoofMatl
+        - Exterior1st
+        - Exterior2nd
+        - MasVnrType
+        - ExterCond
+        - Foundation
+        - BsmtCond
+        - BsmtExposure
+        - BsmtQual
+        - Heating
+        - CentralAir
+        - Electrical
+        - GarageType
+        - GarageFinish
+        - GarageCond
+        - PavedDrive
+        - MiscFeature
+        - SaleType
+        - SaleCondition
+        number_of_iteration: 50
+        numerical_stratergy: median
+        ordinal_categorical_feature:
+        - ExterQual
+        - BsmtFinType1
+        - BsmtFinType2
+        - HeatingQC
+        - KitchenQual
+        - Functional
+        - FireplaceQu
+        - GarageQual
+        - PoolQC
+        - Fence
+        percentile_for_mutual_info: 20
+        polynomial_degree: 2
+        polynomial_model: linear_model
+        polynomial_type: poly
+        random_state_for_lasso: 0
+        random_state_for_randomised_cv: 100
+        random_state_for_train_test_split: 0
+        rare_categorical_variable: Rare_var
+        ridge_regression_solver:
+        - auto
+        - svd
+        - cholesky
+        - lsqr
+        - sparse_cg
+        - sag
+        - saga
+        subsample:
+        - 0.6
+        - 0.7
+        - 0.75
+        - 0.8
+        - 0.85
+        - 0.9
+        target_label: SalePrice
+        test_size: 0.1
+        tol:
+        - 0.0001
+        - 1e-05
+        - 1e-06
+        verbose: 2
+        xgboost_learning_rate:
+        - 0.1
+        - 0.01
+        - 0.05
+        - 0.001
+    outs:
+    - path: artifacts/train_test_data_scaled/X_test_scaled.csv
+      hash: md5
+      md5: ecf5504b77de370c1b30e7f003e48594
+      size: 48538
+    - path: artifacts/train_test_data_scaled/X_train_scaled.csv
+      hash: md5
+      md5: 3ef7f424e07df2031355a1a7b2f3361a
+      size: 433895
+    - path: artifacts/train_test_data_scaled/min_max_scaler.pkl
+      hash: md5
+      md5: 7574ea3955d7ddc95efc4a48f9d7765a
+      size: 1796
+  model_training:
+    cmd: python src/real_estate_price_predictor/pipeline/stage_05_model_training.py
+    deps:
+    - path: artifacts/train_test_data/X_test.csv
+      hash: md5
+      md5: 77ad439205c105f825583c388bd48742
+      size: 29058
+    - path: artifacts/train_test_data/X_train.csv
+      hash: md5
+      md5: b6503cc219b726996555751f7699eae7
+      size: 258488
+    - path: artifacts/train_test_data/Y_test.csv
+      hash: md5
+      md5: 63c3796faaae52ea80f467149013f7c7
+      size: 2911
+    - path: artifacts/train_test_data/Y_train.csv
+      hash: md5
+      md5: 31eba27599586e2c6fdbe20fb209a710
+      size: 26002
+    - path: config/config.yaml
+      hash: md5
+      md5: 69d042b11cedd98fd7e35633e1436a72
+      size: 2858
+    - path: src/real_estate_price_predictor/pipeline/stage_05_model_training.py
+      hash: md5
+      md5: 1f2177a93d33702726e5f2b876853d25
+      size: 1493
+    params:
+      params.yaml:
+        C: 1
+        Id_column:
+        - Id
+        SVR_gamma:
+        - scale
+        - auto
+        alpha_for_lasso: 0.005
+        amazon_service_name: s3
+        categorical_stratergy: constant
+        cv: 3
+        discrete_feature:
+        - MSSubClass
+        - OverallQual
+        - OverallCond
+        - BsmtFullBath
+        - BsmtHalfBath
+        - FullBath
+        - HalfBath
+        - BedroomAbvGr
+        - KitchenAbvGr
+        - TotRmsAbvGrd
+        - Fireplaces
+        - GarageCars
+        - MoSold
+        - YrSold
+        fill_value: others
+        gradient_boost_learning_rate:
+        - 0.1
+        - 0.01
+        - 0.05
+        - 0.001
+        hyper_n_estimators:
+        - 8
+        - 16
+        - 32
+        - 64
+        - 128
+        - 256
+        kernel: rbf
+        list_of_models:
+        - Linear Regression
+        - Ridge Regression
+        - Polynomial Regression
+        - SVR
+        - Random Forrest Regressor
+        - Decision Tree Regressor
+        - AdaBoost Regressor
+        - Gradient Boosting Regressor
+        - XGBRegressor
+        list_of_models_for_hyper_parameter_tuning:
+        - Hyper Parameter Ridge Regression
+        - Hyper Parameter Support Vector Regression
+        - Hyper Parameter Randomn Forrest Regression
+        - Hyper Parameter Gradient Boost Regression
+        - Hyper Parameter XGBoost Regression
+        max_depth: 5
+        max_features:
+        - sqrt
+        - log2
+        - None
+        n_estimators: 100
+        n_jobs: -1
+        nominal_categorical_feature:
+        - MSZoning
+        - Street
+        - Alley
+        - LotShape
+        - LandContour
+        - Utilities
+        - LotConfig
+        - LandSlope
+        - Neighborhood
+        - Condition1
+        - Condition2
+        - BldgType
+        - HouseStyle
+        - RoofStyle
+        - RoofMatl
+        - Exterior1st
+        - Exterior2nd
+        - MasVnrType
+        - ExterCond
+        - Foundation
+        - BsmtCond
+        - BsmtExposure
+        - BsmtQual
+        - Heating
+        - CentralAir
+        - Electrical
+        - GarageType
+        - GarageFinish
+        - GarageCond
+        - PavedDrive
+        - MiscFeature
+        - SaleType
+        - SaleCondition
+        number_of_iteration: 50
+        numerical_stratergy: median
+        ordinal_categorical_feature:
+        - ExterQual
+        - BsmtFinType1
+        - BsmtFinType2
+        - HeatingQC
+        - KitchenQual
+        - Functional
+        - FireplaceQu
+        - GarageQual
+        - PoolQC
+        - Fence
+        percentile_for_mutual_info: 20
+        polynomial_degree: 2
+        polynomial_model: linear_model
+        polynomial_type: poly
+        random_state_for_lasso: 0
+        random_state_for_randomised_cv: 100
+        random_state_for_train_test_split: 0
+        rare_categorical_variable: Rare_var
+        ridge_regression_solver:
+        - auto
+        - svd
+        - cholesky
+        - lsqr
+        - sparse_cg
+        - sag
+        - saga
+        subsample:
+        - 0.6
+        - 0.7
+        - 0.75
+        - 0.8
+        - 0.85
+        - 0.9
+        target_label: SalePrice
+        test_size: 0.1
+        tol:
+        - 0.0001
+        - 1e-05
+        - 1e-06
+        verbose: 2
+        xgboost_learning_rate:
+        - 0.1
+        - 0.01
+        - 0.05
+        - 0.001
+    outs:
+    - path: artifacts/model_trainer/
+      hash: md5
+      md5: dbade4947d2ea264174828f38abe2cdd.dir
+      size: 30255307
+      nfiles: 2

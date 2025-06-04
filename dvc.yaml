@@ -1,0 +1,79 @@
+stages:
+  data_ingestion:
+    cmd: python src/real_estate_price_predictor/pipeline/stage_01_data_ingestion.py
+    deps:
+    - src/real_estate_price_predictor/pipeline/stage_01_data_ingestion.py
+    - config/config.yaml
+    outs:
+    - artifacts/data_ingestion/data.csv
+
+  data_transforamtion:
+    cmd: python src/real_estate_price_predictor/pipeline/stage_02_data_transformation.py
+    deps:
+    - src/real_estate_price_predictor/pipeline/stage_02_data_transformation.py
+    - artifacts/data_ingestion/data.csv
+    - config/config.yaml
+    params:
+    - params.yaml:
+    outs:
+    - artifacts/data_transformation/transformed_data.csv
+    - artifacts/data_transformation/date_time_handler.pkl
+    - artifacts/data_transformation/log_transfomer.pkl
+    - artifacts/data_transformation/nominal_encoder_model.pkl
+    - artifacts/data_transformation/ordinal_encoder_model.pkl
+    - artifacts/data_transformation/rare_categorical_model.pkl
+    - artifacts/data_transformation/remove_outlier_model.pkl
+
+  feature_selection_train_test_split:
+    cmd: python 
+      src/real_estate_price_predictor/pipeline/stage_03_feature_selection_train_test_split.py
+    deps:
+    - src/real_estate_price_predictor/pipeline/stage_03_feature_selection_train_test_split.py
+    - artifacts/data_transformation/transformed_data.csv
+    - config/config.yaml
+    params:
+    - params.yaml:
+    outs:
+    - artifacts/train_test_data/X_train.csv
+    - artifacts/train_test_data/X_test.csv
+    - artifacts/train_test_data/Y_train.csv
+    - artifacts/train_test_data/Y_test.csv
+
+  feature_scaling:
+    cmd: python src/real_estate_price_predictor/pipeline/stage_04_feature_scaling.py
+    deps:
+    - src/real_estate_price_predictor/pipeline/stage_04_feature_scaling.py
+    - artifacts/train_test_data/X_train.csv
+    - artifacts/train_test_data/X_test.csv
+    - config/config.yaml
+    params:
+    - params.yaml:
+    outs:
+    - artifacts/train_test_data_scaled/X_train_scaled.csv
+    - artifacts/train_test_data_scaled/X_test_scaled.csv
+    - artifacts/train_test_data_scaled/min_max_scaler.pkl
+
+  model_training:
+    cmd: python src/real_estate_price_predictor/pipeline/stage_05_model_training.py
+    deps:
+    - src/real_estate_price_predictor/pipeline/stage_05_model_training.py
+    - artifacts/train_test_data/X_train.csv
+    - artifacts/train_test_data/X_test.csv
+    - artifacts/train_test_data/Y_train.csv
+    - artifacts/train_test_data/Y_test.csv
+    - config/config.yaml
+    params:
+    - params.yaml:
+    outs:
+    - artifacts/model_trainer/
+params:
+- dvclive/params.yaml
+metrics:
+- dvclive/metrics.json
+plots:
+- dvclive/plots/metrics:
+    x: step
+artifacts:
+  HyperParameterRandomnForrestRegression:
+    path: artifacts/model_trainer/HyperParameterRandomnForrestRegression.pkl
+    type: model

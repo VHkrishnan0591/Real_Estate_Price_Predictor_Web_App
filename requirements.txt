@@ -16,4 +16,6 @@ scipy
 Flask
 Flask-Cors
 boto3
+dvc
+dvclive
 -e .
